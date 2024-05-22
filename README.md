@@ -48,6 +48,20 @@ Links to other information is welcome.
 - https://en.wikipedia.org/wiki/Kurtosis
 
 
+## Performance
+
+Time in us, platform UNO, 
+
+0.0.0 is non optimized version.
+
+|  function  |  0.0.0  |  0.1.0  |  Notes  |
+|:----------:|:-------:|:-------:|:-------:|
+|  add       |   232   |   212   |
+|  variance  |    -    |    44   |
+|  skewness  |   416   |   352   |
+|  kurtosis  |    -    |    64   |
+
+
 ## Interface
 
 ```cpp
@@ -88,6 +102,7 @@ See Wikipedia for details.
 
 #### Could
 
+- cache skewness and kurtosis? useful?
 
 #### Wont
 

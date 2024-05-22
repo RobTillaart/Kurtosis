@@ -15,6 +15,9 @@ void setup()
 {
   Serial.begin(115200);
   Serial.println(__FILE__);
+  Serial.print("KURTOSIS_LIB_VERSION: ");
+  Serial.println(KURTOSIS_LIB_VERSION);
+  Serial.println();
 
   K.reset();
 
@@ -26,34 +29,21 @@ void setup()
   Serial.println();
   delay(100);
 
-  uint32_t start = micros();
-  K.add(10000);
-  uint32_t stop = micros();
-  Serial.print("ADD:\t");
-  Serial.println(stop - start);
-
   Serial.println();
   Serial.print("COUNT:\t");
   Serial.println(K.count());
   Serial.print("MEAN:\t");
   Serial.println(K.mean());
   Serial.print("VAR:\t");
-  Serial.println(K.var());
+  Serial.println(K.variance());
   Serial.print("STDDEV:\t");
-  Serial.println(K.stdDev());
+  Serial.println(K.stddev());
   Serial.print("SKEW:\t");
   Serial.println(K.skewness());
   Serial.print("KURT:\t");
   Serial.println(K.kurtosis());
   Serial.println();
-  delay(100);
 
-  start = micros();
-  float s = K.skew();
-  stop = micros();
-  Serial.print("SKEW:\t");
-  Serial.println(stop - start);
-  Serial.println(s);
 }
 
 
@@ -64,3 +54,4 @@ void loop()
 
 
 //  -- END OF FILE --
+

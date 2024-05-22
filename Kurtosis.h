@@ -35,14 +35,14 @@ class Kurtosis
 
       //  determine distance to the mean (so far) M1.
       double delta = x - M1;
-      //  calculate the weighted addition for M1.
+      //  calculate the weighted addition for M1 to the mean.
       double delta_n1 = delta / _count;
-      //  TODO calculate the square 
+      //  TODO calculate the square of the weighted addition (?)
       double delta_n2 = delta_n1 * delta_n1;
       //  TODO 
       double term1 = delta * delta_n1 * n1;
 
-      //  optimized math to remove 3 float operations. 10% gain.
+      //  optimized: remove 3 float operations. ~10% gain.
       M1 += delta_n1;
       M4 += delta_n2 * (term1 * (_count * (_count - 3) + 3) + 6 * M2) - 4 * delta_n1 * M3;
       M3 += delta_n1 * (term1 * (_count - 2) - 3 * M2);
@@ -78,7 +78,7 @@ class Kurtosis
 
     double skewness()
     {
-      //  replaced a DIV by a MUL
+      //  optimized: replaced a DIV by a MUL
       return sqrt(double(_count)) * M3 * pow(M2, -1.5);
     };
 
