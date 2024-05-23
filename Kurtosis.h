@@ -9,6 +9,8 @@
 //
 //  code based upon https://www.johndcook.com/blog/skewness_kurtosis/
 //  documentation   https://en.wikipedia.org/wiki/Kurtosis
+//
+//  Experimental
 
 
 #define KURTOSIS_LIB_VERSION        "0.1.1"
@@ -51,18 +53,6 @@ class Kurtosis
       M2 += term1;
     };
 
-    void add(double x, uint8_t times)
-    {
-      Kurtosis temp;
-      temp.reset();
-      temp._count = times;
-      temp.M1 = x;
-      temp.M2 = 0;
-      temp.M3 = 0;
-      temp.M4 = 0;
-      *this += temp;
-    };
-
     uint32_t count()
     {
       return _count;
@@ -102,6 +92,56 @@ class Kurtosis
     };
 
 
+    //////////////////////////////////////////////////////////////
+    //
+    //  ADDING DISTRIBUTIONS
+    //
+    //  Optimization applied to original code.
+    //  - divisions replaced by multiplication
+    //    - prevent "overflow in divider" without using uint64_t.
+    //    - slightly faster when no hardware float support.
+    //  - ab = a.count * b.count; is used 5 times.
+    //  - more are possible, e.g. aa, bb.
+    friend Kurtosis operator + (Kurtosis a, Kurtosis b)
+    {
+      Kurtosis combined;
+
+      combined._count = a._count + b._count;
+
+      double delta  = b.M1 - a.M1;
+      double delta2 = delta * delta;
+      double delta3 = delta * delta2;
+      double delta4 = delta2 * delta2;
+
+      double invcnt = 1.0 / combined._count;
+      double ab = a._count * b._count;
+
+      combined.M1 = (a._count * a.M1 + b._count * b.M1) * invcnt;
+
+      combined.M2 = a.M2 + b.M2 + delta2 * ab * invcnt;
+
+      combined.M3 = a.M3 + b.M3 + delta3 * ab * (a._count - b._count) * invcnt * invcnt;
+
+      combined.M3 += 3.0 * delta * (a._count * b.M2 - b._count * a.M2) * invcnt;
+
+      combined.M4 = a.M4 + b.M4 + delta4 * ab * (a._count * a._count - ab + b._count * b._count)
+                    * invcnt * invcnt * invcnt;
+
+      combined.M4 += 6.0 * delta2 * (a._count * a._count * b.M2 + b._count * b._count * a.M2) * invcnt * invcnt +
+                    4.0 * delta * (a._count * b.M3 - b._count * a.M3) * invcnt;
+
+      return combined;
+    }
+
+
+    Kurtosis& operator += (const Kurtosis& rhs)
+    {
+      Kurtosis combined = *this + rhs;
+      *this = combined;
+      return *this;
+    }
+
+
 //////////////////////////////////////////////////////////////
 //
 //  DEBUG
@@ -115,44 +155,6 @@ class Kurtosis
       Serial.println(M4);
     }
 
-
-    friend Kurtosis operator + (Kurtosis a, Kurtosis b)
-    {
-      Kurtosis combined;
-
-      combined._count = a._count + b._count;
-
-      double delta  = b.M1 - a.M1;
-      double delta2 = delta * delta;
-      double delta3 = delta * delta2;
-      double delta4 = delta2 * delta2;
-
-      combined.M1 = (a._count * a.M1 + b._count * b.M1) / combined._count;
-
-      combined.M2 = a.M2 + b.M2 +
-                    delta2 * a._count * b._count / combined._count;
-
-      combined.M3 = a.M3 + b.M3 +
-                    delta3 * a._count * b._count * (a._count - b._count) / (combined._count * combined._count);
-
-      combined.M3 += 3.0 * delta * (a._count * b.M2 - b._count * a.M2) / combined._count;
-
-      combined.M4 = a.M4 + b.M4 + delta4 * a._count * b._count * (a._count * a._count - a._count * b._count + b._count * b._count) /
-                    (combined._count * combined._count * combined._count);
-
-      combined.M4 += 6.0 * delta2 * (a._count * a._count * b.M2 + b._count * b._count * a.M2)/(combined._count * combined._count) +
-                    4.0 * delta * (a._count * b.M3 - b._count * a.M3) / combined._count;
-
-      return combined;
-    }
-
-
-    Kurtosis& operator += (const Kurtosis& rhs)
-    {
-      Kurtosis combined = *this + rhs;
-      *this = combined;
-      return *this;
-    }
 
   private:
     uint32_t _count;

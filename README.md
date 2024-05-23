@@ -19,7 +19,7 @@ Arduino library for calculating skewness and kurtosis of a dataset  (statistics)
 **Experimental**
 
 This library was written after a request how to calculate the kurtosis of a histogram.
-Diving into this question I learned Kurtosis is a statistical measurements, somewhat 
+Diving into this question I learned Kurtosis is a statistical metric, somewhat 
 related to the skewness ("is balanced") of that data set.
 The goal or kurtosis is to detect outliers (as far as I understand) in the data set.
 
@@ -34,13 +34,14 @@ See - https://www.johndcook.com/blog/skewness_kurtosis/
 
 
 I adapted the code on a few places to improve performance a bit.
-Furthermore I named the library Kurtosis as calculating that is the 
+Furthermore I named the library Kurtosis as calculating that metric is the 
 prime purpose of this library.
 
 For a deep technical reader about kurtosis and skewness I refer to the Wikipedia.
 
-Links to other information is welcome.
+Links to other information are welcome.
 
+The code is not well tested or verified so use with care.
 
 #### Related
 
@@ -59,12 +60,12 @@ Time in us, platform UNO,
 
 0.0.0 is non optimized version.
 
-|  function  |  0.0.0  |  0.1.0  |  Notes  |
-|:----------:|:-------:|:-------:|:-------:|
-|  add       |   232   |   212   |
-|  variance  |    -    |    44   |
-|  skewness  |   416   |   352   |
-|  kurtosis  |    -    |    64   |
+|  function  |  0.0.0  |  0.1.0  |  0.1.1  |  Notes  |
+|:----------:|:-------:|:-------:|:-------:|:-------:|
+|  add       |   232   |  213.7  |  211.6  |  averaged 1000 calls
+|  variance  |    -    |    44   |    48   |  accuracy of UNO is 4 us.
+|  skewness  |   416   |   352   |   356   |
+|  kurtosis  |    -    |    64   |    64   |
 
 
 ## Interface
@@ -81,8 +82,6 @@ Time in us, platform UNO,
 #### Core
 
 - **void add(double x)** add new value to the internal variables.
-- **void add(double x, uint8_t times)** add new value multiple times 
-to the internal variables. Is more efficient from times >= 3.
 - **uint32_t count()** returns the amount of values added.
 - **double mean()** returns the mean (or average) of the values added. 
 This function will return 0 if no values have been added, or after reset().
@@ -95,12 +94,12 @@ positive values indicate right skew. See Wikipedia for details.
 - **double kurtosis()** returns the kurtosis, "tailedness" is used e.g. to detect outliers.
 See Wikipedia for details.
 
-
 #### Operators
+
+For adding distributions.
 
 - **operator +** add two Kurtosis objects together.
 - **operator +=** add a Kurtosis objects to this one.
-
 
 #### debug / development
 
@@ -109,28 +108,24 @@ See Wikipedia for details.
 
 ## Future
 
-
 #### Must
 
 - improve documentation.
-- understand the math in more detail.
+- understand the metrics and math in far more detail.
 
 #### Should
 
-- extend unit tests.
 - add examples to explain the purpose.
+- extend unit tests.
+- ask the experts
+- investigate the order of adding on the metrics.
 
 #### Could
 
 - cache skewness and kurtosis? useful?
 - Template class so one can choose float or double.
 
-
 #### Wont
-
-- **void add(value, times)** is not faster (yet).
-  - maybe adding 2 kurtosis could solve this faster.
-  - having n times a value creates a defined K-curve with count n.
 
 
 ## Support
