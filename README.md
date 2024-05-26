@@ -43,6 +43,32 @@ Links to other information are welcome.
 
 The code is not well tested or verified so use with care.
 
+
+#### Interpretation of Kurtosis metric.
+
+- https://en.wiktionary.org/wiki/mesokurtosis et al.
+
+First order interpretation.
+
+Define: Excess Kurtosis is calculated as kurtosis - 3.
+
+There are three levels of kurtosis.
+
+- Mesokurtosis: An excess kurtosis of approx 0. The normal (Gaussian) distribution is mesokurtic
+- Platykurtosis: A negative excess kurtosis. Platykurtic distributions have a "thin tail", they have relative few outliers.
+- Leptokurtosis: A positive excess kurtosis. Leptokurtic distributions have a "thick tail", they have many outliers.
+
+
+#### Interpretation of Skewness metric.
+
+First order interpretation.
+
+- Skewness between -0.5 and 0.5 => normal distribution
+- Skewness between -1.0 and 1.0 => reasonable normal distribution
+- Skewness smaller than -1.0 => left skewed distribution
+- Skewness larger than 1.0 => right skewed distribution
+
+
 #### Related
 
 - https://github.com/RobTillaart/Histogram
