@@ -32,7 +32,6 @@ The code of this library is based upon the code of **John D. Cook** in the blog 
 "Computing skewness and kurtosis in one pass". Thanks for his kind permission!
 See - https://www.johndcook.com/blog/skewness_kurtosis/
 
-
 I adapted the code on a few places to improve performance a bit.
 Furthermore I named the library Kurtosis as calculating that metric is the 
 prime purpose of this library.
@@ -144,7 +143,7 @@ For adding distributions.
 - add examples to explain the purpose.
 - extend unit tests.
 - ask the experts
-- investigate the order of adding on the metrics.
+- investigate the order of adding values on the metrics.
 
 #### Could
 

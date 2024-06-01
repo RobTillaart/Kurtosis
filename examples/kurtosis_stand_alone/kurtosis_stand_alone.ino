@@ -11,35 +11,6 @@
 double arr[100];
 
 
-void setup()
-{
-  Serial.begin(115200);
-  Serial.println(__FILE__);
-  Serial.println();
-
-  //  fill array with random values.
-  for (int i = 0; i < 100; i++)
-  {
-    arr[i] = 0.001 * random(i * 10);  //  skewed on purpose
-  }
-
-  Serial.println();
-  delay(100);
-
-  Serial.println();
-  Serial.println("COUNT:\t100");
-  Serial.print("KURTOSIS:\t");
-  Serial.println(kurtosis(arr, 100), 3);
-  Serial.print("SKEWNESS:\t");
-  Serial.println(skewness(arr, 100), 3);
-  Serial.println();
-}
-
-
-void loop()
-{
-}
-
 //
 //                size * sum( (arr[i] - average)^4 )
 //  kurtosis() = ------------------------------------
@@ -67,7 +38,6 @@ double kurtosis(double *arr, uint16_t size)
 
   return (size * a) / (b * b);
 }
-
 
 
 //                   sum( (arr[i] - average)^3 )
@@ -106,5 +76,40 @@ double skewness(double *arr, uint16_t size)
 
   return sqrt(1.0 * size) * a * pow(b, -1.5);
 }
+
+
+///////////////////////////////////////////////////////////////////////
+//
+//  MAIN
+//
+void setup()
+{
+  Serial.begin(115200);
+  Serial.println(__FILE__);
+  Serial.println();
+
+  //  fill array with random values.
+  for (int i = 0; i < 100; i++)
+  {
+    arr[i] = 0.001 * random(i * 10);  //  skewed on purpose
+  }
+
+  Serial.println();
+  delay(100);
+
+  Serial.println();
+  Serial.println("COUNT:\t100");
+  Serial.print("KURTOSIS:\t");
+  Serial.println(kurtosis(arr, 100), 3);
+  Serial.print("SKEWNESS:\t");
+  Serial.println(skewness(arr, 100), 3);
+  Serial.println();
+}
+
+
+void loop()
+{
+}
+
 
 //  -- END OF FILE --
